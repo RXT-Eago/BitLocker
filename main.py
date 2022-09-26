@@ -3,6 +3,8 @@ import linecache
 import json
 import pyautogui
 import traceback
+import os
+from sys import platform
 
 from passlib.hash import bcrypt
 
@@ -41,7 +43,7 @@ def EncryptMessage(key, JSON):
 
     f = Fernet(key)
     encrypted = f.encrypt(message)
-    print(encrypted)
+    #print(encrypted)
 
     with open('info.json', 'w') as json_file:
         json.dump(encrypted.decode("utf-8"), json_file, indent=4, separators=(',',': '))
@@ -58,7 +60,7 @@ def Decrypted(key):
     f = Fernet(key)
     decrypted = f.decrypt(message)
     #print(decrypted)
-    print(decrypted.decode("utf-8") )
+    #print(decrypted.decode("utf-8") )
     res = json.loads(decrypted.decode("utf-8"))
 
     return res
@@ -66,7 +68,7 @@ def Decrypted(key):
 
 
 def DisplayHelpCommand():
-    print(" - save [*WebSite*] [*Password*] #Save a new account for website\n")
+    print("\n - save [*WebSite*] [*Password*] #Save a new account for website\n")
     print(" - use [*WebSite*] #write the website's password directly where cursor is\n")
     print(" - rm [*WebSite*] #delete the WebSite and Password associated\n")
     print(" - list #List every website register\n")
@@ -146,14 +148,14 @@ def Menu():
         try:
             WebSite = Args.split()[1]
             NewPassWord = Args.split()[2]
-            print(str(WebSite) + " " + str(NewPassWord))
+            #print(str(WebSite) + " " + str(NewPassWord))
 
             #save parameter action
             SaveCommand(WebSite, NewPassWord)
 
         except Exception as E:
             print(E)
-            traceback.print_exc()
+            #traceback.print_exc()
             print("Command not properly written")
 
     elif Args.find("use") != -1:
@@ -161,7 +163,7 @@ def Menu():
         try:
 
             WebSite = Args.split()[1]
-            print(str(WebSite))
+            #print(str(WebSite))
 
             #use parameter action
             UseWebSiteCommand(str(WebSite))
@@ -175,7 +177,7 @@ def Menu():
         try:
 
             WebSite = Args.split()[1]
-            print(str(WebSite))
+            #print(str(WebSite))
 
             #use parameter action
             RemoveWebSiteCommand(str(WebSite))
@@ -209,9 +211,15 @@ def Connection():
     
     return hasher.verify(str(PASSWORD), str(hash))
 
+def ClearConsole():
+    if platform == "linux" or platform == "linux2":
+        os.system('clear')
+    elif platform == "win32" or platform == "win64":
+        os.system('cls')
         
 while True:
     if Connection():
+        ClearConsole()
         print("try *help* to display available command")
         global key
         key = GetKeyFromPassword()
