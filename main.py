@@ -105,8 +105,8 @@ def UseWebSiteCommand(WebSite):
         for i in range(5,0,-1):
             print(i)
             time.sleep(1)
-
-        pyautogui.write(WebSiteObject[WebSite], interval = 0.2)
+        print(WebSiteObject[WebSite])
+        #pyautogui.write(WebSiteObject[WebSite], interval = 0.2) ------------------ not working properly on all keyboard type ----------------
 
     else:
         print("WebSite unknown")
